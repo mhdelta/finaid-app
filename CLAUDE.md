@@ -33,6 +33,8 @@ Cada banco tiene quirks de formato (decimales, fechas, categorías embebidas, se
 ## Perímetro de ingresos (definirlo en Fase 0 y respetarlo)
 Si el dinero pasa por plataformas intermedias (nómina, Deel, PayPal…) que no son cuentas del CSV, los abonos que llegan a cuentas rastreadas pueden ser retiros del mismo ingreso, no ingresos adicionales. El documento base define qué cuenta como ingreso; el CSV no se suma a ciegas.
 
+El **efectivo** es el otro caso de perímetro: si una parte del flujo se cobra y gasta en mano sin tocar cuentas, los depósitos son un proxy del ingreso (no el ingreso) y los retiros una bolsa de gasto opaca. El documento base define cómo se mide esa parte y qué reglas la gobiernan; nunca se trata como si el banco viera todo.
+
 ## Tareas típicas
 - **"Revisión mensual"** → sigue `rituales/revision_mensual.md`.
 - **"Procesa los extractos"** → sigue `rituales/ingesta.md` sobre `extractos/entrada/`.

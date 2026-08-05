@@ -7,11 +7,12 @@ Antes de empezar, confirmar con el usuario el contrato del README (exporta extra
 
 ## 1. Entrevista de inventario
 Preguntar y anotar (esto alimenta §1–§3 del documento base):
-- **Cuentas y productos**: todas las cuentas bancarias, tarjetas, billeteras y plataformas intermedias (nómina, Deel, PayPal, exchanges), con moneda y para qué se usa cada una. Decidir cuáles entran al CSV (perímetro) y cuáles quedan fuera y por qué.
+- **Cuentas y productos**: todas las cuentas bancarias, tarjetas, billeteras y plataformas intermedias (nómina, Deel, PayPal, exchanges), con moneda y para qué se usa cada una. De cada producto, **condiciones y costos aunque no se use** (cuota de manejo/anualidad de tarjetas, comisiones de mantenimiento): un producto dormido también puede costar dinero. Decidir cuáles entran al CSV (perímetro) y cuáles quedan fuera y por qué.
+- **Efectivo**: ¿qué parte del flujo vive fuera de los bancos (cobros en mano, pagos en efectivo, impuestos en ventanilla)? Si es significativa, el perímetro debe decir cómo se mide (los depósitos como proxy del ingreso, los retiros como bolsa de gasto) y el plan necesitará reglas que la gobiernen (§6).
 - **Ingresos**: monto, canal, periodicidad, y qué tan confiable es cada fuente. Separar el **ingreso recurrente confiable** (base del plan) de los extras.
 - **Deudas**: producto, saldo aproximado, tasa, historia (moras, refinanciaciones). Marcar todo lo no confirmado como "a verificar con extractos".
 - **Compromisos fijos** ineludibles y **fiscalidad** (retenciones, trimestrales, autónomo/empleado).
-- **Monedas** en las que se gana y se gasta.
+- **Monedas** en las que se gana y se gasta (pregunta abierta: no asumir una moneda por defecto).
 
 ## 2. Reunir extractos
 Pedir al usuario **3–6 meses** de extractos de cada cuenta del perímetro, en `extractos/entrada/`. Preferir formatos de datos (CSV/XLS) sobre PDF cuando el banco los ofrezca. Menos de 3 meses → el diagnóstico de gasto no es representativo; decirlo y seguir con lo que haya, marcándolo.
@@ -23,7 +24,7 @@ Seguir `rituales/ingesta.md`. En esta primera pasada, además:
 - La validación de saldos es innegociable también aquí: una cuenta que no cuadra no entra al CSV hasta resolverse.
 
 ## 4. Diagnóstico (con código sobre el CSV)
-- **Ingreso real** del período vs. lo declarado en la entrevista. Ojo al perímetro: abonos desde plataformas intermedias pueden ser el mismo ingreso moviéndose, no ingreso extra.
+- **Ingreso real** del período vs. lo declarado en la entrevista. Ojo al perímetro: abonos desde plataformas intermedias pueden ser el mismo ingreso moviéndose, no ingreso extra. En perfiles de efectivo, los depósitos son un **proxy** del ingreso, no el ingreso: decirlo explícitamente y cuantificar la brecha contra lo declarado.
 - **Gasto por categoría**: clasificar por keywords sobre `concepto` (reglas por banco → `notas_bancos.md`), promediando solo meses completos y representativos. Excluir transferencias internas. El efectivo retirado sin rastro es una categoría.
 - **Deudas**: saldo real, costo mensual (interés + comisiones), y el mecanismo que las alimenta (¿qué gasto cae en la tarjeta y por qué?).
 - **Flujo estructural**: ¿el período fue superavitario por sí mismo o lo sostuvo algo no repetible (venta de un activo, extra)? Decirlo sin suavizarlo.
@@ -34,6 +35,8 @@ Copiar `plantillas/finanzas_base.template.md` a la raíz como `finanzas_base.md`
 
 ## 6. Plan y reglas de ejecución
 Con el diagnóstico validado, proponer el plan (§6): prioridad entre deuda y colchón, pago/ahorro mensual calculado solo con el ingreso recurrente, proyección mes a mes, reglas de ejecución (orden de pagos, provisiones, saldo mínimo, contingencia). El usuario decide; lo decidido queda escrito.
+
+Las reglas de ejecución **se negocian, no se dictan**: toda regla operativa necesita una cadencia realista para la vida del usuario (no "inmediato"), un tratamiento definido del sobrante (p. ej. retiro fijo como techo con arrastre, no como cuota obligatoria) y una vía para el gasto sin comprobante (una nota manual vale). Una regla que el usuario anuncia que no podrá cumplir se ajusta **antes** de escribirse como definitiva: mejor una regla cumplible que una perfecta que va a fallar.
 
 ## 7. Cierre
 - Verificar: extractos movidos a `procesados/`, backup del CSV hecho, `finanzas_base.md` v1.0 con changelog.

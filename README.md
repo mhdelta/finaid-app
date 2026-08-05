@@ -30,7 +30,7 @@ El valor del sistema no está en el análisis financiero (eso lo hace cualquier 
 
 1. Clona o copia este repo.
 2. Abre tu agente en la raíz y dile: **"Arranca la Fase 0"** (o sigue `rituales/bootstrap.md` a mano).
-3. Deja tus extractos en `extractos/entrada/` cuando el ritual te los pida.
+3. Deja tus extractos en `extractos/entrada/` cuando el ritual te los pida. (En cristiano: los archivos que descargas de tu banco van a la carpeta `extractos`, subcarpeta `entrada` — nada más.)
 4. Al terminar la Fase 0 tendrás tu `finanzas_base.md` v1.0 y el sistema queda en régimen mensual.
 
 ## El contrato del usuario
@@ -79,6 +79,6 @@ y por eso no está en el `.gitignore`. Si usas el marco y quieres contribuir, es
 
 ## Pendiente antes de v1.0
 
-- [ ] Prueba con datos sintéticos: extractos ficticios de 2–3 bancos con errores deliberados, para validar que los rituales se sostienen sin instrucciones ad-hoc.
+- [x] ~~Prueba con datos sintéticos~~ → hecho como **piloto con datos reales adaptados** (ago 2026): cuenta única del dataset Berka, cliente simulado por agente, bootstrap completo sin instrucciones ad-hoc. Hallazgos aplicados; informe en `docs/pilotos/2026-08-berka.md`. Queda abierto probar multi-banco/multi-formato en el siguiente piloto.
 - [ ] Piloto real con una persona de perfil distinto al de origen (otra moneda, sin deuda, empleado en vez de autónomo).
 - [ ] Endurecer la plantilla con lo que ambos pilotos descubran.

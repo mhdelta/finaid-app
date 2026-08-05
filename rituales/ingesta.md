@@ -17,20 +17,29 @@ Cuidados de formato (los específicos de cada banco viven en `notas_bancos.md` �
 - **Fechas**: identificar el formato de cada fuente (DD/MM vs MM/DD es el error silencioso clásico); normalizar a ISO `YYYY-MM-DD`. Si un archivo usa un formato inesperado, indicarlo en el resumen.
 - **PDFs escaneados** (imagen): avisar antes de intentar OCR.
 - **Clasificar `tipo`**: `gasto` | `ingreso` | `transferencia_interna` | `pago_deuda` | `comision`. Las transferencias entre cuentas propias del perímetro son `transferencia_interna` — detectarlas evita inflar gasto e ingreso.
+- **El código/subtipo manda sobre el descriptor**: si el formato trae un campo de código o categoría además del texto principal, ese campo decide `tipo` (hay bancos que emiten comisiones con descriptor de "retiro de efectivo" y solo el código las delata).
 
 ### 3. VALIDACIÓN DE SALDOS (sanity check obligatorio)
 Para cada extracto: saldo inicial + suma de movimientos = saldo final del extracto. Si no cuadra, reportar la diferencia y **NO integrar esa cuenta al CSV** hasta resolverlo. Este paso detecta errores de extracción; saltárselo corrompe el dataset en silencio.
 
-### 4. ESTADO DE DEUDAS (si aplica)
+Si el extracto trae **saldo corrido por fila**, la columna de saldo manda: el importe fiable se deriva como delta entre saldos consecutivos y la columna de importe se trata como presentación (hay bancos que la redondean unos céntimos). Con ese criterio, descuadres residuales de céntimos se documentan en `notas_bancos.md` y no bloquean; cualquier descuadre mayor, o sin saldo corrido que lo arbitre, sí bloquea la cuenta.
+
+### 4. INTERROGATORIO DE PATRONES (antes de integrar)
+Con las transacciones extraídas y validadas, revisar y **preguntar al usuario** lo que los datos no explican — integrarlo después:
+- **Recurrencias idénticas sin concepto** (misma cantidad, misma fecha relativa): preguntar qué son y enriquecer el `concepto` en el CSV con la respuesta.
+- **Abonos pasivos implausibles** (intereses, devoluciones, entradas que "el banco no regala"): si el usuario no los explica, se marcan "a verificar" y **no cuentan como ingreso del plan**.
+- Lo aprendido se documenta (`notas_bancos.md` o el documento base según corresponda).
+
+### 5. ESTADO DE DEUDAS (si aplica)
 De los extractos de tarjetas/créditos: saldo total, desglose de cuotas o capital pendiente, intereses del período, pago mínimo, comisiones. Actualizar `datos/estado_deudas.md`.
 
-### 5. INTEGRACIÓN
-- Backup: copiar `datos/transacciones_unificadas.csv` a `datos/backup/transacciones_unificadas_YYYYMMDD.csv`.
+### 6. INTEGRACIÓN
+- Backup: copiar `datos/transacciones_unificadas.csv` a `datos/backup/transacciones_unificadas_YYYYMMDD.csv`. (En la primera ingesta el CSV aún no existe: se crea directamente y los backups arrancan en la siguiente.)
 - Añadir las transacciones nuevas manteniendo el esquema existente (leer el header del CSV primero y respetarlo).
 - Deduplicar contra lo existente (fecha + importe + concepto + cuenta).
 - Reportar: nº de transacciones añadidas, rango de fechas, totales por cuenta y moneda.
 
-### 6. CIERRE
+### 7. CIERRE
 - Mover los archivos procesados de `entrada/` a `procesados/YYYY-MM/`.
 - Resumen final: qué entró, qué quedó pendiente, anomalías detectadas (candidatas al backlog del documento base).
 - **Bitácora de fricción** (`piloto/bitacora.md`; crearla desde `plantillas/bitacora.template.md` si no existe): registrar lo que este ritual no contempló — instrucciones ad-hoc, quirks de banco nuevos (el detalle va a `notas_bancos.md`; a la bitácora va el patrón generalizado), atascos. **Nunca con datos personales** (reglas en la plantilla).
