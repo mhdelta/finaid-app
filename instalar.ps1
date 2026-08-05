@@ -31,6 +31,7 @@ $Saltar  = @()
 if ($env:FINAID_SKIP) { $Saltar = $env:FINAID_SKIP.Split(',') | ForEach-Object { $_.Trim().ToLower() } }
 
 $script:Avisos = @()
+$script:ClaudeRecienInstalado = $false
 
 function Paso  ($n, $t) { Write-Host ""; Write-Host "[$n/6] $t" -ForegroundColor Cyan }
 function Ok    ($t)     { Write-Host "  OK    $t" -ForegroundColor Green }
@@ -241,6 +242,7 @@ else {
         $local = Join-Path $env:USERPROFILE '.local\bin'
         if (Test-Path (Join-Path $local 'claude.exe')) { $env:Path = "$local;$env:Path" }
     }
+    $script:ClaudeRecienInstalado = $true
     if (Hay 'claude') { Ok "instalado: $((Ejecutar-Nativo 'claude' @('--version')).Salida)" }
     else { Morir "Claude Code se instalo pero no aparece en el PATH. Cierra PowerShell, abrelo de nuevo y vuelve a lanzar el instalador." }
 }
@@ -395,7 +397,14 @@ if ($script:Avisos.Count -gt 0) {
     foreach ($a in $script:Avisos) { Write-Host "  - $a" -ForegroundColor Yellow }
     Write-Host ""
 }
-Write-Host "Siguiente paso - copia y pega estas dos lineas:" -ForegroundColor White
+if ($script:ClaudeRecienInstalado) {
+    # El PATH de una ventana ya abierta no cambia: 'claude' no se reconocera en esta.
+    Write-Host "IMPORTANTE: cierra ESTA ventana y abre una nueva antes de seguir." -ForegroundColor Yellow
+    Write-Host "Claude Code acaba de instalarse y esta ventana todavia usa el PATH viejo:" -ForegroundColor Yellow
+    Write-Host "si escribes 'claude' aqui, dira que no se reconoce el termino." -ForegroundColor Yellow
+    Write-Host ""
+}
+Write-Host "Siguiente paso - en una ventana NUEVA, copia y pega estas dos lineas:" -ForegroundColor White
 Write-Host ""
 Write-Host "    cd `"$Destino`"" -ForegroundColor Cyan
 Write-Host "    claude" -ForegroundColor Cyan
