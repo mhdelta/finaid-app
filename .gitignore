@@ -7,6 +7,8 @@ datos/backup/*
 extractos/entrada/*
 extractos/procesados/*
 revisiones/*
+# piloto/bitacora.md NO se ignora a propósito: se escribe sin datos personales
+# (ver plantillas/bitacora.template.md) y es el canal de retorno hacia el marco.
 
 # conservar la estructura de carpetas vacía
 !**/.gitkeep

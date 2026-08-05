@@ -33,3 +33,4 @@ De los extractos de tarjetas/créditos: saldo total, desglose de cuotas o capita
 ### 6. CIERRE
 - Mover los archivos procesados de `entrada/` a `procesados/YYYY-MM/`.
 - Resumen final: qué entró, qué quedó pendiente, anomalías detectadas (candidatas al backlog del documento base).
+- **Bitácora de fricción** (`piloto/bitacora.md`; crearla desde `plantillas/bitacora.template.md` si no existe): registrar lo que este ritual no contempló — instrucciones ad-hoc, quirks de banco nuevos (el detalle va a `notas_bancos.md`; a la bitácora va el patrón generalizado), atascos. **Nunca con datos personales** (reglas en la plantilla).

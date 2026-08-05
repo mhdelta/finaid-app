@@ -25,3 +25,4 @@ Primera semana de cada mes. Prerequisito: la ingesta del mes anterior ya hecha (
 - Crear `revisiones/YYYY-MM_revision.md` con: tasas usadas (si aplica), deuda real vs. plan, las 3 desviaciones principales, **la decisión/ajuste del mes**, backlog actualizado.
 - Actualizar `finanzas_base.md`: nueva versión (v1.1, v1.2…), cambios anotados en el changelog, foto patrimonial (§2) con tasas del día si hubo movimientos relevantes.
 - El usuario ejecuta los movimientos acordados; el agente no asume nada como hecho.
+- **Bitácora de fricción** (`piloto/bitacora.md`; crearla desde `plantillas/bitacora.template.md` si no existe): registrar lo que este ritual no contempló — pasos ambiguos, indicadores que faltaron, instrucciones ad-hoc del usuario. **Nunca con datos personales** (reglas en la plantilla).

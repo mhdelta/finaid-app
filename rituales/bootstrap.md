@@ -39,3 +39,4 @@ Con el diagnóstico validado, proponer el plan (§6): prioridad entre deuda y co
 - Verificar: extractos movidos a `procesados/`, backup del CSV hecho, `finanzas_base.md` v1.0 con changelog.
 - Acordar la fecha de la primera revisión mensual (primera semana del mes siguiente).
 - Sembrar el backlog (§8) con todo lo que quedó "a verificar".
+- **Bitácora de fricción**: crear `piloto/bitacora.md` desde `plantillas/bitacora.template.md` y registrar todo lo que el marco no contempló durante el bootstrap (instrucciones ad-hoc del usuario, pasos ambiguos, secciones de la plantilla que sobraron o faltaron, quirks de banco). Reglas y formato, en la propia plantilla. **Nunca con datos personales.**

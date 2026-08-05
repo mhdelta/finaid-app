@@ -1,8 +1,9 @@
 # Proyecto: Finanzas personales (marco finaid)
 
 ## Antes de hacer NADA
-1. Si existe `finanzas_base.md` en la raíz: **léelo COMPLETO**. Es la fuente de verdad (contexto, deuda, presupuesto, plan, riesgos, principios). Ningún análisis ni cálculo se hace sin haberlo leído. Revisa su "Estado de ejecución" y su backlog — ahí está lo pendiente entre sesiones.
-2. Si NO existe `finanzas_base.md`: el proyecto está en Fase 0. Sigue `rituales/bootstrap.md`.
+0. **Identifica qué repo es este.** El marco vive en dos formas: el **repo canónico**, donde se desarrolla el marco mismo (plantilla, rituales, documentación; el trabajo es *meta* — ver "Pendiente antes de v1.0" en el README) y las **instancias**, copias donde una persona opera sus finanzas reales. En el repo canónico nunca existirá `finanzas_base.md` y **nunca se arranca la Fase 0**: no hay finanzas que operar ahí.
+1. Si existe `finanzas_base.md` en la raíz: es una instancia en régimen. **Léelo COMPLETO**. Es la fuente de verdad (contexto, deuda, presupuesto, plan, riesgos, principios). Ningún análisis ni cálculo se hace sin haberlo leído. Revisa su "Estado de ejecución" y su backlog — ahí está lo pendiente entre sesiones.
+2. Si NO existe `finanzas_base.md` y el contexto no deja claro cuál de las dos formas es: **pregúntale al usuario** antes de asumir nada. Solo si confirma que es una instancia nueva, sigue `rituales/bootstrap.md`.
 
 ## Principios innegociables
 1. **Los cálculos se hacen con código** sobre `datos/transacciones_unificadas.csv`, nunca "de memoria".
@@ -17,6 +18,7 @@
 - **Solo se procesa lo que está en `extractos/entrada/`.** Lo que está en `procesados/` ya vive en el CSV; volver a ingestarlo duplicaría transacciones.
 - Tras una ingesta exitosa (validación de saldos incluida), mueve los archivos de `entrada/` a `procesados/YYYY-MM/` según el período que cubren.
 - El CSV maestro nunca se sobreescribe a ciegas: copia `datos/backup/transacciones_unificadas_YYYYMMDD.csv` antes de añadir filas.
+- `piloto/bitacora.md` es el canal de retorno hacia el marco: cualquier fricción con el marco — también fuera de un ritual — se registra ahí, **sin datos personales** (reglas en `plantillas/bitacora.template.md`).
 
 ## El dataset maestro
 - `datos/transacciones_unificadas.csv`, esquema fijo: `fecha, cuenta, concepto, importe, moneda, tipo`.

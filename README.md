@@ -53,7 +53,8 @@ finaid-app/
 ├── README.md                     ← este archivo
 ├── CLAUDE.md                     ← instrucciones para el agente
 ├── plantillas/
-│   └── finanzas_base.template.md ← esqueleto del documento de estado
+│   ├── finanzas_base.template.md ← esqueleto del documento de estado
+│   └── bitacora.template.md      ← esqueleto de la bitácora de fricción
 ├── rituales/
 │   ├── bootstrap.md              ← Fase 0
 │   ├── ingesta.md                ← procesar extractos nuevos
@@ -62,8 +63,19 @@ finaid-app/
 ├── extractos/
 │   ├── entrada/                  ← aquí dejas los extractos nuevos
 │   └── procesados/YYYY-MM/       ← ya ingestados; no reprocesar
-└── revisiones/                   ← salida de cada revisión mensual
+├── revisiones/                   ← salida de cada revisión mensual
+└── piloto/                       ← (se genera en Fase 0) bitácora de fricción — ver abajo
 ```
+
+## Canal de retorno: la bitácora de fricción
+
+Cada instancia mejora el marco. En el cierre de cada ritual, el agente registra en
+`piloto/bitacora.md` todo lo que el marco no contempló: instrucciones ad-hoc que el usuario tuvo
+que dar, pasos ambiguos, secciones de la plantilla que sobraron o faltaron, quirks de banco
+generalizados. La bitácora se escribe **sin datos personales por diseño** (reglas en
+`plantillas/bitacora.template.md`) — es el único archivo de la instancia pensado para compartirse,
+y por eso no está en el `.gitignore`. Si usas el marco y quieres contribuir, ese archivo es lo
+único que necesitamos de vuelta.
 
 ## Pendiente antes de v1.0
 
