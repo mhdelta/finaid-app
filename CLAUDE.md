@@ -3,7 +3,8 @@
 ## Antes de hacer NADA
 0. **Identifica qué repo es este.** El marco vive en dos formas: el **repo canónico**, donde se desarrolla el marco mismo (plantilla, rituales, documentación; el trabajo es *meta* — ver "Pendiente antes de v1.0" en el README) y las **instancias**, copias donde una persona opera sus finanzas reales. En el repo canónico nunca existirá `finanzas_base.md` y **nunca se arranca la Fase 0**: no hay finanzas que operar ahí.
 1. Si existe `finanzas_base.md` en la raíz: es una instancia en régimen. **Léelo COMPLETO**. Es la fuente de verdad (contexto, deuda, presupuesto, plan, riesgos, principios). Ningún análisis ni cálculo se hace sin haberlo leído. Revisa su "Estado de ejecución" y su backlog — ahí está lo pendiente entre sesiones.
-2. Si NO existe `finanzas_base.md` y el contexto no deja claro cuál de las dos formas es: **pregúntale al usuario** antes de asumir nada. Solo si confirma que es una instancia nueva, sigue `rituales/bootstrap.md`.
+2. Si NO existe `finanzas_base.md` pero sí existe `.marco-version` en la raíz: es una **instancia recién instalada** que aún no ha hecho la Fase 0. Sigue `rituales/bootstrap.md`.
+3. Si no existe ninguno de los dos y el contexto no deja claro cuál de las dos formas es: **pregúntale al usuario** antes de asumir nada. Solo si confirma que es una instancia nueva, sigue `rituales/bootstrap.md`.
 
 ## Principios innegociables
 1. **Los cálculos se hacen con código** sobre `datos/transacciones_unificadas.csv`, nunca "de memoria".
