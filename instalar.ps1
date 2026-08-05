@@ -1,4 +1,4 @@
-﻿# instalar.ps1 - Instalador del marco finaid para Windows 10/11.
+# instalar.ps1 - Instalador del marco finaid para Windows 10/11.
 #
 # Deja el PC listo para operar finanzas con un agente: Claude Code, Python con pandas,
 # el marco descargado y una verificacion que prueba que la cadena entera funciona.
@@ -316,7 +316,7 @@ else {
 
     if ($script:PyExe) {
         # Prueba real de la cadena que usan los rituales: escribir CSV UTF-8 con acentos,
-        # releerlo con pandas y que las cuentas cuadren. Es el principio nº1 del marco.
+        # releerlo con pandas y que las cuentas cuadren. Es el principio numero 1 del marco.
         $prueba = Join-Path $env:TEMP "finaid-verificacion-$(Get-Random).py"
         $codigo = @'
 import sys, os, tempfile
