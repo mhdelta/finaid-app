@@ -13,6 +13,9 @@ revisiones/*
 # conservar la estructura de carpetas vacía
 !**/.gitkeep
 
+# sello de version que escribe el instalador en cada instancia
+.marco-version
+
 # temporales
 *.pyc
 __pycache__/

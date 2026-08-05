@@ -24,7 +24,7 @@
 - `datos/transacciones_unificadas.csv`, esquema fijo: `fecha, cuenta, concepto, importe, moneda, tipo`.
   - `fecha`: ISO `YYYY-MM-DD`. `importe`: negativo = sale dinero, positivo = entra. `moneda`: código ISO (EUR, USD, COP…).
   - `tipo`: `gasto` | `ingreso` | `transferencia_interna` | `pago_deuda` | `comision`. Las transferencias entre cuentas propias son `transferencia_interna` y **se excluyen** de cualquier análisis de gasto/ingreso.
-- Guardar con UTF-8 (tolerar BOM al leer); leer con pandas o equivalente, no con parsing manual.
+- Guardar con UTF-8 (tolerar BOM al leer); leer con pandas o equivalente, no con parsing manual. **Escribir siempre desde código con `encoding='utf-8'` explícito**; en Windows, nunca con `Out-File`/`Set-Content` de PowerShell (su codificación por defecto no es UTF-8 y corrompe los acentos en silencio).
 - El CSV **no tiene columna de categoría**: la clasificación se hace por keywords sobre `concepto`, con las reglas por banco documentadas en `datos/notas_bancos.md`.
 
 ## Conocimiento por banco: `datos/notas_bancos.md`

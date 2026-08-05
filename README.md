@@ -28,7 +28,7 @@ El valor del sistema no está en el análisis financiero (eso lo hace cualquier 
 
 ## Cómo empezar
 
-1. Clona o copia este repo.
+1. Clona o copia este repo. **En Windows hay un instalador que lo hace todo** (Claude Code, Python con pandas, el marco y una verificación de que la cadena funciona): ver [`INSTALL.md`](INSTALL.md).
 2. Abre tu agente en la raíz y dile: **"Arranca la Fase 0"** (o sigue `rituales/bootstrap.md` a mano).
 3. Deja tus extractos en `extractos/entrada/` cuando el ritual te los pida. (En cristiano: los archivos que descargas de tu banco van a la carpeta `extractos`, subcarpeta `entrada` — nada más.)
 4. Al terminar la Fase 0 tendrás tu `finanzas_base.md` v1.0 y el sistema queda en régimen mensual.
@@ -51,6 +51,8 @@ Tus datos financieros son tuyos. El `.gitignore` de este repo **excluye por defe
 ```
 finaid-app/
 ├── README.md                     ← este archivo
+├── INSTALL.md                    ← instalación en Windows
+├── instalar.ps1                  ← instalador (Windows)
 ├── CLAUDE.md                     ← instrucciones para el agente
 ├── plantillas/
 │   ├── finanzas_base.template.md ← esqueleto del documento de estado
