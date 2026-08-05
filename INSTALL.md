@@ -37,13 +37,18 @@ Aun así, revócalo al terminar el piloto.
 
 ## La instalación
 
-En el PC de destino, abrir **PowerShell** (menú Inicio → escribir "PowerShell" → Enter) y pegar
-estas dos líneas, sustituyendo el token:
+En el PC de destino, abrir una terminal (**da igual PowerShell o CMD**) y pegar esta línea,
+sustituyendo el token:
 
-```powershell
-$env:FINAID_TOKEN='github_pat_TU_TOKEN_AQUI'
-irm "https://api.github.com/repos/mhdelta/finaid-app/contents/instalar.ps1?ref=develop" -Headers @{Authorization="Bearer $env:FINAID_TOKEN"; Accept='application/vnd.github.raw'} | iex
 ```
+powershell -NoProfile -ExecutionPolicy Bypass -Command "[Environment]::SetEnvironmentVariable('FINAID_TOKEN','github_pat_TU_TOKEN_AQUI','Process'); iex (irm 'https://api.github.com/repos/mhdelta/finaid-app/contents/instalar.ps1?ref=develop' -Headers @{Authorization=('Bearer '+[Environment]::GetEnvironmentVariable('FINAID_TOKEN')); Accept='application/vnd.github.raw'})"
+```
+
+> **Por qué es tan feo**: no contiene ni un `$` ni un `%`, y por eso el mismo texto funciona
+> literalmente igual pegado en CMD y en PowerShell. Un comando que empiece por `irm` **sólo
+> funciona en PowerShell**: en CMD responde *"'irm' no se reconoce como un comando interno o
+> externo"*. Y `-ExecutionPolicy Bypass` está ahí porque la política por defecto de Windows es
+> `Restricted`. Las dos cosas están verificadas en las dos shells.
 
 Tarda entre 3 y 10 minutos, casi todo descargando Python y Claude Code.
 
@@ -107,9 +112,11 @@ Los extractos del banco van en `C:\Users\<usuario>\finaid\extractos\entrada`.
 
 | Síntoma | Causa y solución |
 |---|---|
-| `'irm' is not recognized` | Estás en CMD, no en PowerShell. Abrir PowerShell. |
-| `The token '&&' is not a valid statement separator` | Al revés: estás en PowerShell ejecutando un comando de CMD. |
-| `404` o `401` al descargar | El token caducó, no tiene permiso de *Contents: Read* o no incluye ese repositorio. Regenerarlo. |
+| `'irm' no se reconoce como un comando interno o externo` | Estás en CMD y pegaste la variante corta de PowerShell. Usar el comando universal de arriba. |
+| `no se puede cargar el archivo ... ejecución de scripts está deshabilitada` | Política `Restricted` (la de fábrica). El comando universal ya lleva `-ExecutionPolicy Bypass`. |
+| `GitHub rechaza el token (401)` | Mal copiado o caducado. Regenerarlo. |
+| `no tiene ninguna rama llamada 'main' (422)` | La rama del marco es `develop`. |
+| `No se encuentra el repositorio (404)` | Nombre mal escrito, o el token no incluye ese repo en su lista de acceso. |
 | `Python was not found` | Los alias de la Microsoft Store interceptan `python`. Configuración → Aplicaciones → *Alias de ejecución de aplicaciones* → desactivar `python.exe` y `python3.exe`. Relanzar. |
 | Instala Python pero luego no lo encuentra | El PATH de esa ventana es viejo. Cerrar PowerShell, abrirlo de nuevo, relanzar el instalador (es re-ejecutable). |
 | `claude` no se reconoce tras instalar | Igual: ventana nueva de PowerShell. El binario queda en `%USERPROFILE%\.local\bin`. |
