@@ -115,8 +115,16 @@ if ($Destino -like "*OneDrive*") {
 
 # El token es el fallo mas probable de toda la instalacion. Se comprueba AQUI, antes de
 # gastar diez minutos instalando Python y Claude Code para morir al final descargando.
+# Si no hay token, se intenta igual sin cabecera de autorizacion: con el repo publico
+# la instalacion funciona sin token ninguno.
+function Cabeceras-GitHub ($accept) {
+    $h = @{ Accept = $accept; 'User-Agent' = 'finaid-instalador' }
+    if ($env:FINAID_TOKEN) { $h['Authorization'] = "Bearer $env:FINAID_TOKEN" }
+    return $h
+}
+
 function Comprobar-Acceso {
-    $hdr = @{ Authorization = "Bearer $env:FINAID_TOKEN"; Accept = 'application/vnd.github+json'; 'User-Agent' = 'finaid-instalador' }
+    $hdr = Cabeceras-GitHub 'application/vnd.github+json'
     try {
         Invoke-WebRequest -Uri "https://api.github.com/repos/$Repo/commits/$Rama" -Headers $hdr -UseBasicParsing -Method Head | Out-Null
         return
@@ -126,7 +134,10 @@ function Comprobar-Acceso {
         switch ($codigo) {
             401 { Morir "GitHub rechaza el token (401). Esta mal copiado o ha caducado. Genera uno nuevo y vuelve a lanzar el instalador." }
             403 { Morir "GitHub deniega el acceso (403). El token no tiene permiso 'Contents: Read' sobre $Repo." }
-            404 { Morir "No se encuentra el repositorio $Repo (404). Puede ser que el nombre este mal escrito o que el token no incluya ese repositorio en su lista de acceso." }
+            404 {
+                if (-not $env:FINAID_TOKEN) { Morir "No se encuentra $Repo (404) y no se ha dado ningun token. Si el repositorio es privado, hace falta token." }
+                Morir "No se encuentra el repositorio $Repo (404). Puede ser que el nombre este mal escrito o que el token no incluya ese repositorio en su lista de acceso."
+            }
             422 { Morir "El repositorio $Repo existe, pero no tiene ninguna rama llamada '$Rama' (422). La rama por defecto del marco es 'develop'." }
             default {
                 if ($null -eq $codigo) { Morir "No hay conexion con GitHub. Revisa la conexion a internet y reintenta.`n$($_.Exception.Message)" }
@@ -137,11 +148,9 @@ function Comprobar-Acceso {
 }
 
 if (-not $env:FINAID_SRC -and -not (Saltado 'marco')) {
-    if (-not $env:FINAID_TOKEN) {
-        Morir "Falta el token de descarga. Revisa el comando de instalacion: tiene que incluir tu token de GitHub."
-    }
     Comprobar-Acceso
-    Ok "acceso a $Repo ($Rama) confirmado"
+    if ($env:FINAID_TOKEN) { Ok "acceso a $Repo ($Rama) confirmado" }
+    else { Ok "acceso a $Repo ($Rama) confirmado (repositorio publico, sin token)" }
 }
 
 # Modo: instalacion nueva o actualizacion del marco sobre una instancia viva.
@@ -255,7 +264,7 @@ function Obtener-Marco ($staging) {
     }
     $zip = Join-Path $env:TEMP "finaid-marco-$(Get-Random).zip"
     $url = "https://api.github.com/repos/$Repo/zipball/$Rama"
-    $hdr = @{ Authorization = "Bearer $env:FINAID_TOKEN"; Accept = 'application/vnd.github+json'; 'User-Agent' = 'finaid-instalador' }
+    $hdr = Cabeceras-GitHub 'application/vnd.github+json'
 
     Info "descargando $Repo ($Rama)..."
     try {
