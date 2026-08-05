@@ -1,0 +1,17 @@
+# Datos personales — NUNCA se versionan por defecto.
+# Si tu fork es PRIVADO y quieres versionar tu instancia, edita esto a conciencia.
+finanzas_base.md
+datos/*
+!datos/backup/
+datos/backup/*
+extractos/entrada/*
+extractos/procesados/*
+revisiones/*
+
+# conservar la estructura de carpetas vacía
+!**/.gitkeep
+
+# temporales
+*.pyc
+__pycache__/
+.ipynb_checkpoints/
