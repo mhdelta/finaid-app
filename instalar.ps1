@@ -113,6 +113,37 @@ if ($Destino -like "*OneDrive*") {
     Aviso "El destino esta dentro de OneDrive: los extractos y el CSV se sincronizarian a la nube de Microsoft. Recomendado: $env:USERPROFILE\finaid"
 }
 
+# El token es el fallo mas probable de toda la instalacion. Se comprueba AQUI, antes de
+# gastar diez minutos instalando Python y Claude Code para morir al final descargando.
+function Comprobar-Acceso {
+    $hdr = @{ Authorization = "Bearer $env:FINAID_TOKEN"; Accept = 'application/vnd.github+json'; 'User-Agent' = 'finaid-instalador' }
+    try {
+        Invoke-WebRequest -Uri "https://api.github.com/repos/$Repo/commits/$Rama" -Headers $hdr -UseBasicParsing -Method Head | Out-Null
+        return
+    } catch {
+        $codigo = $null
+        try { $codigo = [int]$_.Exception.Response.StatusCode } catch {}
+        switch ($codigo) {
+            401 { Morir "GitHub rechaza el token (401). Esta mal copiado o ha caducado. Genera uno nuevo y vuelve a lanzar el instalador." }
+            403 { Morir "GitHub deniega el acceso (403). El token no tiene permiso 'Contents: Read' sobre $Repo." }
+            404 { Morir "No se encuentra el repositorio $Repo (404). Puede ser que el nombre este mal escrito o que el token no incluya ese repositorio en su lista de acceso." }
+            422 { Morir "El repositorio $Repo existe, pero no tiene ninguna rama llamada '$Rama' (422). La rama por defecto del marco es 'develop'." }
+            default {
+                if ($null -eq $codigo) { Morir "No hay conexion con GitHub. Revisa la conexion a internet y reintenta.`n$($_.Exception.Message)" }
+                else { Morir "GitHub respondio $codigo al comprobar el acceso a $Repo ($Rama)." }
+            }
+        }
+    }
+}
+
+if (-not $env:FINAID_SRC -and -not (Saltado 'marco')) {
+    if (-not $env:FINAID_TOKEN) {
+        Morir "Falta el token de descarga. Revisa el comando de instalacion: tiene que incluir tu token de GitHub."
+    }
+    Comprobar-Acceso
+    Ok "acceso a $Repo ($Rama) confirmado"
+}
+
 # Modo: instalacion nueva o actualizacion del marco sobre una instancia viva.
 $instanciaViva = (Test-Path (Join-Path $Destino 'finanzas_base.md')) -or
                  (Test-Path (Join-Path $Destino 'datos\transacciones_unificadas.csv'))
